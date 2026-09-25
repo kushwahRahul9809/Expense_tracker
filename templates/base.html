@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Expense Tracker</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="navbar">
+    <div class="brand">💰 Expense Tracker</div>
+    <nav>
+        <a href="/" class="{{ 'active' if active == 'index' else '' }}">Transactions</a>
+        <a href="/add" class="{{ 'active' if active == 'add' else '' }}">Add Expense</a>
+        <a href="/dashboard" class="{{ 'active' if active == 'dashboard' else '' }}">Dashboard</a>
+    </nav>
+</div>
+{% block content %}{% endblock %}
+</body>
+</html>
