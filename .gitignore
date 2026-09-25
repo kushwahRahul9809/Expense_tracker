@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+expenses.db
+categorizer.joblib
+venv/
+.env
