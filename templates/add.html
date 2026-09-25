@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Add Expense</h2>
+    <form method="POST" action="/add">
+        <label>Description</label>
+        <input type="text" id="description" name="description" required
+               placeholder="e.g. uber ride to airport">
+        <div id="ai-hint"></div>
+
+        <label>Amount</label>
+        <input type="number" step="0.01" name="amount" required placeholder="0.00">
+
+        <label>Category (leave as Auto to let AI decide)</label>
+        <select name="category" id="category">
+            <option value="auto">✨ Auto (AI-predicted)</option>
+            {% for c in categories %}
+            <option value="{{ c }}">{{ c }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Add Expense</button>
+    </form>
+</div>
+
+<script>
+const descInput = document.getElementById("description");
+const hint = document.getElementById("ai-hint");
+let timer;
+
+descInput.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(async () => {
+        const description = descInput.value;
+        if (!description.trim()) { hint.textContent = ""; return; }
+        const res = await fetch("/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description })
+        });
+        const data = await res.json();
+        if (data.category) {
+            hint.textContent = `✨ AI suggests: ${data.category} (${data.confidence}% confidence)`;
+        }
+    }, 400);
+});
+</script>
+{% endblock %}
